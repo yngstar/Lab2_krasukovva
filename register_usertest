@@ -1,0 +1,194 @@
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+using NUnit.Framework;
+
+[TestFixture]
+public class RegistrationTests
+{
+    [Test]
+    public void RegisterUser_WithValidData_ShouldReturnTrue()
+    {
+        // Arrange
+        string login = "valid_user";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsTrue(result);
+        Assert.AreEqual("", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithShortLogin_ShouldReturnFalse()
+    {
+        // Arrange
+        string login = "short";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual("Login must contain at least 5 characters.", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithInvalidLoginFormat_ShouldReturnFalse()
+    {
+        // Arrange
+        string login = "invalid login";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual("Login must be in the format of phone number, email, or string of characters.", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithPredefinedLogin_ShouldReturnFalse()
+    {
+        // Arrange
+        string login = "user1";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual("Login is already taken.", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithMismatchedPasswords_ShouldReturnFalse()
+    {
+        // Arrange
+        string login = "valid_user";
+        string password = "Valid123#";
+        string confirmPassword = "MismatchedPassword";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual("Password and confirmation password do not match.", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithShortPassword_ShouldReturnFalse()
+    {
+        // Arrange
+        string login = "valid_user";
+        string password = "Short1#";
+        string confirmPassword = "Short1#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual("Password must contain at least 7 characters.", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithInvalidPasswordFormat_ShouldReturnFalse()
+    {
+        // Arrange
+        string login = "valid_user";
+        string password = "invalidpassword";
+        string confirmPassword = "invalidpassword";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual("Password does not meet the requirements (at least one uppercase and lowercase letter, one digit, and one special character).", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithValidPhoneNumberLogin_ShouldReturnTrue()
+    {
+        // Arrange
+        string login = "+1-555-555-5555";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsTrue(result);
+        Assert.AreEqual("", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithValidEmailLogin_ShouldReturnTrue()
+    {
+        // Arrange
+        string login = "user@example.com";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsTrue(result);
+        Assert.AreEqual("", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithValidCharacterStringLogin_ShouldReturnTrue()
+    {
+        // Arrange
+        string login = "valid_login";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsTrue(result);
+        Assert.AreEqual("", message);
+    }
+
+    [Test]
+    public void RegisterUser_WithInvalidCharacterStringLoginFormat_ShouldReturnFalse()
+    {
+        // Arrange
+        string login = "invalid login!";
+        string password = "Valid123#";
+        string confirmPassword = "Valid123#";
+        string message;
+
+        // Act
+        bool result = Program.RegisterUser(login, password, confirmPassword, out message);
+
+        // Assert
+        Assert.IsFalse(result);
+        Assert.AreEqual("Login must be in the format of phone number, email, or string of characters.", message);
+    }
+
+}
