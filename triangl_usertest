@@ -1,0 +1,231 @@
+using System.Globalization;
+using System.Collections.Generic;
+using NUnit.Framework;
+
+[TestFixture]
+public class TriangleTests
+{
+    [Test]
+    public void GetTriangleInfo_WithValidData_ShouldReturnTriangleTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "3.0";
+        string sideB = "4";
+        string sideC = "5.0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("разносторонний", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithNegativeSideA_ShouldReturnEmptyTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "-3.0";
+        string sideB = "4";
+        string sideC = "5.0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithNonTriangleSides_ShouldReturnNotTriangleTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "1";
+        string sideB = "1";
+        string sideC = "3";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("не треугольник", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithEquilateralSides_ShouldReturnEquilateralTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "7";
+        string sideB = "7";
+        string sideC = "7";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("равнобедренный", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithInvalidInput_ShouldReturnEmptyTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "abc";
+        string sideB = "4.0";
+        string sideC = "5,0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndInvariantCulture_ShouldReturnTriangleTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "3.0";
+        string sideB = "4.0";
+        string sideC = "5.0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("разносторонний", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndInvalidCulture_ShouldReturnEmptyTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "3.0";
+        string sideB = "4,0"; // Заменено запятой в качестве разделителя
+        string sideC = "5.0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndNonTriangleSides_ShouldReturnNotTriangleTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "1.0";
+        string sideB = "2.0";
+        string sideC = "3.0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("не треугольник", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndNegativeSideB_ShouldReturnEmptyTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "3.0";
+        string sideB = "-4.0"; // Отрицательная длина стороны B
+        string sideC = "5.0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndZeroSideC_ShouldReturnEmptyTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "3.0";
+        string sideB = "4.0";
+        string sideC = "0.0"; // Нулевая длина стороны C
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndAllSidesZero_ShouldReturnEmptyTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "0.0";
+        string sideB = "0.0";
+        string sideC = "0.0"; // Все стороны нулевой длины
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithEquilateralSidesAndCommaDecimalSeparator_ShouldReturnEquilateralTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "7,0"; // Десятичный разделитель запятая
+        string sideB = "7,0";
+        string sideC = "7,0";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("равнобедренный", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndSmallDecimals_ShouldReturnTriangleTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "0.0001";
+        string sideB = "0.0002";
+        string sideC = "0.0003";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("разносторонний", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+
+    [Test]
+    public void GetTriangleInfo_WithValidDataAndLargeDecimals_ShouldReturnTriangleTypeAndVertices()
+    {
+        // Arrange
+        string sideA = "12345.6789";
+        string sideB = "9876.5432";
+        string sideC = "54321.0123";
+
+        // Act
+        (string, List<(int, int)>) result = Triangle.GetTriangleInfo(sideA, sideB, sideC);
+
+        // Assert
+        Assert.AreEqual("разносторонний", result.Item1);
+        Assert.AreEqual(3, result.Item2.Count);
+    }
+}
